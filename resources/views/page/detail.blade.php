@@ -5,8 +5,9 @@
         <div class="bg-white shadow-md rounded-lg p-6 w-full">
             <div class="flex justify-between">
                 <h1 class="text-2xl font-bold mb-2">{{ $job->title }}</h1>
-                @if (auth()->user()->role == 'tasker' || auth()->id() == $job->user_id)
-                    <div class="flex justify-between">
+                <a class="border" href="{{ route('dashboard') }}">Back</a>
+                <div class="flex justify-between">
+                    @if (auth()->user()->role == 'tasker' || auth()->id() == $job->user_id)
                         <a href="{{ route('editJob', ['id' => $job->id]) }}"
                             class="bg-yellow-400 text-white px-4 py-2 rounded hover:bg-yellow-500 mr-1.5">✏️ Edit Job</a>
                         <form action="{{ route('deleteJob', ['id' => $job->id]) }}" method="POST"
@@ -17,8 +18,8 @@
                                 class="bg-red-500 hover:bg-red-600 hover:underline text-white px-4 py-2 rounded">🗑️
                                 Delete</button>
                         </form>
-                    </div>
-                @endif
+                    @endif
+                </div>
             </div>
             <h1 class="text-md mb-4 max-h-32 hover:overflow-y-scroll">{{ $job->description }}</h1>
         </div>
@@ -46,44 +47,44 @@
                     <tbody>
                         {{-- @dd($task) --}}
                         @foreach ($task as $item)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 border truncate">{{ $item->title }}</td>
-                                <td class="px-4 py-2 border truncate">{{ $item->description }}</td>
-                                @if (auth()->user()->role == 'worker')
-                                    <td class="px-4 py-2 border text-center truncate">
-                                        {{-- Status --}}
-                                        @php
-                                            $userTask = \App\Models\UserTask::where('task_id', $item->id)
-                                                ->where('user_id', auth()->id())
-                                                ->first();
-                                        @endphp
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-2 border truncate">{{ $item->title }}</td>
+                                            <td class="px-4 py-2 border truncate">{{ $item->description }}</td>
+                                            @if (auth()->user()->role == 'worker')
+                                                                <td class="px-4 py-2 border text-center truncate">
+                                                                    {{-- Status --}}
+                                                                    @php
+                                                                        $userTask = \App\Models\UserTask::where('task_id', $item->id)
+                                                                            ->where('user_id', auth()->id())
+                                                                            ->first();
+                                                                    @endphp
 
-                                        @if ($userTask && $userTask->completed_at)
-                                            <span class="text-green-600 font-semibold ml-2">✅ Done!</span>
-                                        @else
-                                            <span class="text-red-600 font-semibold ml-2">❌ Not done</span>
-                                        @endif
-                                    </td>
-                                @endif
-                                <td class="px-4 py-2 border text-center space-x-2 truncate">
-                                    <a href="{{ route('detailTask', ['id' => $item->id]) }}"
-                                        class="text-blue-500 hover:underline">👁️ View</a>
-                                    <a href="{{ route('editTask', ['id' => $item->id]) }}"
-                                        class="text-yellow-500 hover:underline">✏️Edit</a>
-                                    @if (auth()->user()->role == 'tasker')
-                                        <form action="{{ route('deleteTask', ['id' => $item->id]) }}" method="POST"
-                                            onsubmit="return confirm('Yakin mau hapus task ini?')" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:underline">🗑️ Delete</button>
-                                        </form>
-                                    @endif
-                                    @if (auth()->user()->role == 'worker')
-                                        <a href="{{ route('uploadProof', ['id' => $item->id]) }}"
-                                            class="text-indigo-500 hover:underline">🗃️ Proof</a>
-                                    @endif
-                                </td>
-                            </tr>
+                                                                    @if ($userTask && $userTask->completed_at)
+                                                                        <span class="text-green-600 font-semibold ml-2">✅ Done!</span>
+                                                                    @else
+                                                                        <span class="text-red-600 font-semibold ml-2">❌ Not done</span>
+                                                                    @endif
+                                                                </td>
+                                            @endif
+                                            <td class="px-4 py-2 border text-center space-x-2 truncate">
+                                                @if (auth()->user()->role == 'tasker' || auth()->id() == $job->user_id)
+                                                <a href="{{ route('detailTask', ['id' => $item->id]) }}"
+                                                    class="text-blue-500 hover:underline">👁️ View</a>
+                                                    <a href="{{ route('editTask', ['id' => $item->id]) }}"
+                                                        class="text-yellow-500 hover:underline">✏️Edit</a>
+                                                    <form action="{{ route('deleteTask', ['id' => $item->id]) }}" method="POST"
+                                                        onsubmit="return confirm('Yakin mau hapus task ini?')" class="inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="text-red-500 hover:underline">🗑️ Delete</button>
+                                                    </form>
+                                                @endif
+                                                @if (auth()->user()->role == 'worker')
+                                                    <a href="{{ route('uploadProof', ['id' => $item->id]) }}"
+                                                        class="text-indigo-500 hover:underline">🗃️ Proof</a>
+                                                @endif
+                                            </td>
+                                        </tr>
                         @endforeach
                     </tbody>
                 </table>

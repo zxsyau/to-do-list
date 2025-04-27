@@ -21,7 +21,7 @@ class TaskController extends Controller
     public function createTask($job_id)
     {
         $job = Job::find($job_id);
-        return view("page.createTask", compact('job'));
+        return view("page.createtask", compact('job'));
 
     }
 

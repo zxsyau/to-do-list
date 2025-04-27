@@ -3,13 +3,13 @@
 @section('content')
     <div class="flex flex-col items-center min-h-screen bg-gray-50 mt-10 px-25">
         <div class="bg-white shadow-md rounded-lg p-6 w-full">
-            <div class="flex justify-between">
+            <div class="flex flex-col">
                 <h1 class="text-2xl font-bold mb-4">User List - {{ Str::title($type) }}</h1>
-                {{-- <a href="{{ route('users', ['type' => 'tasker']) }}"
-                    class="bg-blue-100 hover:bg-blue-200 text-center rounded-md text-2xl font-bold text-gray-600 mr-2">Kelola
-                    User Tasker</a> --}}
-                <a href="{{ route('createuser', ['type' => $type]) }}"
-                    class="bg-indigo-500 text-white text-md rounded-md p-3 ">+ Create User</a>
+                <div class="flex justify-between w-full">
+                    <a href="{{ route('dashboard') }}" class="bg-indigo-500 text-white text-md rounded-md p-3">Back</a>
+                    <a href="{{ route('createuser', ['type' => $type]) }}"
+                    class="bg-indigo-500 text-white text-md rounded-md p-3">+ Create User</a>
+                </div>
             </div>
         </div>
 
@@ -45,7 +45,7 @@
                                 <form action=" {{ route('postDeleteUser', ['id' => $user->id]) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit"
+                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this user?')"
                                         class="text-red-500 rounded-md hover:underline">🗑️Delete</button>
                                 </form>
                             </td>
